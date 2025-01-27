@@ -5,12 +5,12 @@
 #include "iostream"
 #include "fstream"
 #include "string"
-#include "/snap/root-framework/936/usr/local/include/TROOT.h"
-#include "/snap/root-framework/936/usr/local/include/TF1.h"
-#include "/snap/root-framework/936/usr/local/include/Math/Minimizer.h"
-#include "/snap/root-framework/936/usr/local/include/Math/Factory.h"
-#include "/snap/root-framework/936/usr/local/include/Math/Functor.h"
-#include "/snap/root-framework/936/usr/local/include/TError.h"
+#include "TROOT.h"
+#include "TF1.h"
+#include "Math/Minimizer.h"
+#include "Math/Factory.h"
+#include "Math/Functor.h"
+#include "TError.h"
 using namespace std;
 #define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
