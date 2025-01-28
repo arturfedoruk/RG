@@ -152,13 +152,13 @@ int main(){
 		z = SMDR_lambda_in / (16*pi*pi);
 		
 		tree->Fill();
-		
-		cout << "Processed event: " << ientry+1 << "/" << N << endl;
+		cout << "Processed event: " << ientry+1 << "/" << N << "\r";
+		cout.flush();
 	
 	}
 	
 	tree->Write(0,TObject::kWriteDelete,0);
-	cout << "Successfully processed " << N << " events using seed=" << seed << endl;
+	cout << "\nSuccessfully processed " << N << " events" << endl;
 	
 	}
 
