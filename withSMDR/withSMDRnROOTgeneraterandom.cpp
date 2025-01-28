@@ -20,6 +20,7 @@ using namespace std;
 
 int main(){
 	
+	/*
 	int seed;
 	ifstream lastSeed("lastSeed.txt");
 	if ( lastSeed.is_open() ) {
@@ -30,6 +31,10 @@ int main(){
 	ofstream lastSeed_new("lastSeed.txt");
 	lastSeed_new << seed+1 << endl;
 	lastSeed_new.close();
+	*/
+	TRandom3 r(0);
+	int seed = int( r.Rndm() * 2147483640 );
+	
 	
 	TFile *file = new TFile("random_data.root", "UPDATE");
 	TTree *tree;
@@ -148,7 +153,7 @@ int main(){
 		
 		tree->Fill();
 		
-		cout << "Processed event: " << ientry << "/" << N << endl;
+		cout << "Processed event: " << ientry+1 << "/" << N << endl;
 	
 	}
 	
