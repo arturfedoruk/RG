@@ -127,7 +127,7 @@ int main(){
 		Mh = random_generator.Gaus(SMDR_Mh_EXPT, SMDR_Mh_EXPT_UNC);
 		Mt = random_generator.Gaus(SMDR_Mt_EXPT, SMDR_Mt_EXPT_UNC);
 		mbmb = random_generator.Gaus(SMDR_mbmb_EXPT, SMDR_mbmb_EXPT_UNC_hi);
-		Delta_alpha = random_generator.Gaus(SMDR_Delta_alpha_had_5_MZ_EXPT, SMDR_Delta_alpha_had_5_MZ_EXPT);
+		Delta_alpha = random_generator.Gaus(SMDR_Delta_alpha_had_5_MZ_EXPT, SMDR_Delta_alpha_had_5_MZ_EXPT_UNC);
 		
 		my_Fit_Inputs (SMDR_Q_in, 
 				alphaS_MZ, 
