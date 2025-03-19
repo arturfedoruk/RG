@@ -1,5 +1,5 @@
 // version of SMDR_Fit_inputs with added loop customization and without particles lighter than b (all Qs are original)
-int  SMDR_Fit_Inputs (SMDR_REAL Q_target,
+int  my_Fit_Inputs_original (SMDR_REAL Q_target,
                       SMDR_REAL alphaS_5_MZ_target,
                       SMDR_REAL alpha_target,
                       SMDR_REAL GFermi_target,

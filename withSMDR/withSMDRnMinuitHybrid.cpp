@@ -17,6 +17,8 @@ using namespace std;
 #include "my_Fit_Inputs.cpp"
 
 
+float n_of_sigmas = 1;
+
 // function, that returns specific MSbar quantity
 Double_t compute_MSbar  (const Double_t* pars) // Q_target, alphaS_5_MZ_target, alpha_target, GFermi_target, MZ_target, Mh_target, Mt_target, mbmb_target, Delta_alpha_had_target, error_target, loop_config0, loop_config1, loop_config2, loop_config3, loop_config4, loop_config5, loop_config6, loop_config7, what (what you want to compute)
 {
@@ -41,23 +43,8 @@ Double_t compute_MSbar_butminus  (const Double_t* pars)
 	return  - compute_MSbar(pars);          
 }
 
-int main(){
-	
-	double pi = 3.1415926535;
-	SMDR_Q_in = 173.22; // mass of top-quark, we work here
-	float n_of_sigmas = 1;
-	
-	ROOT::Math::Minimizer* minimizer = ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad");
-	
-	minimizer->SetMaxFunctionCalls(10000);
-	minimizer->SetMaxIterations(1000);
-	minimizer->SetTolerance(0.01);
-	minimizer->SetPrintLevel(0);
-
-	ROOT::Math::Functor functor(&compute_MSbar, 19);
-
-	minimizer->SetFunction(functor);
-
+void init_minimizer(ROOT::Math::Minimizer* minimizer)
+{
 	minimizer->SetFixedVariable(0, "Q", 173.22);
 	
 	// minimizer->SetLimitedVariable(no, "name", initial, step, lower_bound, higher_bound)
@@ -70,7 +57,7 @@ int main(){
 	minimizer->SetLimitedVariable(7, "mbmb", SMDR_mbmb_EXPT, SMDR_mbmb_EXPT_UNC_hi/5, SMDR_mbmb_EXPT - n_of_sigmas*SMDR_mbmb_EXPT_UNC_lo, SMDR_mbmb_EXPT + n_of_sigmas*SMDR_mbmb_EXPT_UNC_hi);
 	minimizer->SetLimitedVariable(8, "Dah5MZ", SMDR_Delta_alpha_had_5_MZ_EXPT, SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/10, SMDR_Delta_alpha_had_5_MZ_EXPT - n_of_sigmas*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC, SMDR_Delta_alpha_had_5_MZ_EXPT + n_of_sigmas*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC);
 	
-	minimizer->SetFixedVariable(9, "error_tolerance", 1.e-12);
+	minimizer->SetFixedVariable(9, "error_tolerance", 1.e-6);
 	
 	minimizer->SetFixedVariable(10, "loop_config[0]", 1);
 	minimizer->SetFixedVariable(11, "loop_config[1]", 1);
@@ -80,6 +67,25 @@ int main(){
 	minimizer->SetFixedVariable(15, "loop_config[5]", 1);
 	minimizer->SetFixedVariable(16, "loop_config[6]", 1);
 	minimizer->SetFixedVariable(17, "loop_config[7]", 1);
+}
+
+int main(){
+	
+	double pi = 3.1415926535;
+	SMDR_Q_in = 173.22; // mass of top-quark, we work here
+	
+	ROOT::Math::Minimizer* minimizer = ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad");
+	
+	minimizer->SetMaxFunctionCalls(10000);
+	minimizer->SetMaxIterations(10000);
+	minimizer->SetTolerance(0.001);
+	minimizer->SetPrintLevel(0);
+
+	ROOT::Math::Functor functor(&compute_MSbar, 19);
+
+	minimizer->SetFunction(functor);
+
+	init_minimizer(minimizer);
 	
 	minimizer->SetFixedVariable(18, "what", 1);
 	//extracting lower bounds
@@ -87,22 +93,27 @@ int main(){
 	Double_t g_low = minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 2);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t gp_low = minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 3);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t g3_low = minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 4);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t yt_low = minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 5);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t yb_low = minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 6);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t lambda_low = minimizer->MinValue();
 	
@@ -111,27 +122,34 @@ int main(){
 
 	minimizer->SetFunction(functor2);
 	
+	init_minimizer(minimizer);
+	
 	minimizer->SetVariableValue(18, 1);
 	minimizer->Minimize();
 	Double_t g_high = - minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 2);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t gp_high = - minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 3);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t g3_high = - minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 4);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t yt_high = - minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 5);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t yb_high = - minimizer->MinValue();
 	
 	minimizer->SetVariableValue(18, 6);
+	init_minimizer(minimizer);
 	minimizer->Minimize();
 	Double_t lambda_high = - minimizer->MinValue();
 	
@@ -152,7 +170,7 @@ int main(){
 	cout << "y1 is (" << yt_low*yt_low / (16*pi*pi) << " ... " << yt_high*yt_high / (16*pi*pi) <<")" << endl;
 	cout << "y2 is (" << yb_low*yb_low / (16*pi*pi) << " ... " << yb_high*yb_high / (16*pi*pi) <<")" << endl;
 	cout << "z is (" << lambda_low / (16*pi*pi) << " ... " << lambda_high / (16*pi*pi) <<")" << endl;
-
+	
 	
 	return 0;
 }

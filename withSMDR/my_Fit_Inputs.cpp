@@ -1,4 +1,7 @@
 // version of SMDR_Fit_inputs with added loop customization, without particles lighter than b and with all Qs be pinned to be equal Q_target
+
+#define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
+
 int  my_Fit_Inputs (SMDR_REAL Q_target,
                       SMDR_REAL alphaS_5_MZ_target,
                       SMDR_REAL alpha_target,
@@ -12,6 +15,12 @@ int  my_Fit_Inputs (SMDR_REAL Q_target,
                       SMDR_REAL error_target,
                       float* loop_config)
 {
+
+	// loop configurations for the functions below: 
+	// {Mt, Mt, Mh, MZ, MW, GFermi, QCDQED_at_MZ, mbmb} 
+	// {y, ?, z, x, x, z, x, y} -1 loop
+	// (Mt has two loop configurations)
+
   char funcname[] = "my_Fit_Inputs";
   int j;
   SMDR_REAL vratio, v2ratio;
@@ -37,8 +46,7 @@ int  my_Fit_Inputs (SMDR_REAL Q_target,
 	SMDR_REAL coyb_yb2    = 0.0744955866;
 
   if (mbmb_target < 3.0) {
-    SMDR_Warn (funcname, "Target mb(mb) is too small.");
-    SMDR_Warn (funcname, "Setting it and all lighter fermion masses to 0.\n");
+    std::cout << "warning: mbmb is too smol, setting it zero" << std::endl;
     mbmb_target = 0;
   } 
 
