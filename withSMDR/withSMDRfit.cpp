@@ -8,6 +8,7 @@
 #include "TROOT.h"
 #include "TTree.h"
 #include "TFile.h"
+#include "TMath.h"
 #include "Math/Minimizer.h"
 #include "Math/Factory.h"
 #include "Math/Functor.h"
@@ -33,7 +34,6 @@ TTree *tree;
 TTree *tree_assess;
 
 string filename_default = "net_data.root";
-//string treename_default = "tree_222222_5,_:80_1500_40_35_2000_20_80";
 string treename_default = "tree_222222_5,_:5_5_5_5_5_5_5";
 string treename_assess_default = "tree_222222_5,_:5_5_5_5_5_5_5";
 
@@ -155,7 +155,7 @@ Double_t fit_yt(Double_t* xx, const Double_t* par){
 	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
 	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
 	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
-	return par[9] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltaS*deltaS + par[7]*deltaa + par[8]*deltah*deltat);
+	return par[9] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltaS*deltaS + par[7]*deltah*deltat + par[8]*deltaa);
 }
 
 Double_t sum_squares_yt(const Double_t* pars){
@@ -338,6 +338,12 @@ int main(){
 		}
 		
 		cout << "\n\nlambda_mean = " << lambda_mean << "\nlambda_min = " << lambda_min << "\nlambda_max = " << lambda_max << "\nsigma = " << lambda_sigma << " \nExperimental error: " << lambda_sigma / lambda_mean << "\n\nlambda_errmean = " << lambda_errmean << "\nlambda_errmax = " << lambda_errmax << "\nFit mean error: " << lambda_errmean / lambda_mean << "\nFit max error: " << lambda_errmax / lambda_mean << endl;
+		
+		double Delta_lambda = fit_results[15] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[12]*fit_results[12]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[13]*fit_results[13]*SMDR_mbmb_EXPT_UNC_hi*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT/SMDR_mbmb_EXPT + fit_results[14]*fit_results[14]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
+		//double Delta_lambda = fit_results[15] * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[12])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[13])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[14])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta lambda = " << Delta_lambda << "\nDelta z = " << Delta_lambda / (16. * TMath::Pi()*TMath::Pi()) << endl; 
+		
 	}
 	
 	if(what==1)
@@ -416,6 +422,12 @@ int main(){
 		
 		cout << "\n\ng_mean = " << g_mean << "\ng_min = " << g_min << "\ng_max = " << g_max << "\nsigma = " << g_sigma << " \nExperimental error: " << g_sigma / g_mean << "\n\ng_errmean = " << g_errmean << "\ng_errmax = " << g_errmax << "\nFit mean error: " << g_errmean / g_mean << "\nFit max error: " << g_errmax / g_mean << endl;
 		
+		double Delta_g = fit_results[11] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[9]*fit_results[9]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[10]*fit_results[10]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
+		
+		//double Delta_g = fit_results[11] * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[9])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[10])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x1 = " << 5.* fit_results[11] * Delta_g / (24. * TMath::Pi()*TMath::Pi()) << endl; 
+		
 	}
 	
 	if(what==2)
@@ -492,6 +504,12 @@ int main(){
 		
 		cout << "\n\ngp_mean = " << gp_mean << "\ngp_min = " << gp_min << "\ngp_max = " << gp_max << "\nsigma = " << gp_sigma << " \nExperimental error: " << gp_sigma / gp_mean << "\n\ngp_errmean = " << gp_errmean << "\ngp_errmax = " << gp_errmax << "\nFit mean error: " << gp_errmean / gp_mean << "\nFit max error: " << gp_errmax / gp_mean << endl;
 		
+		double Delta_gp = fit_results[9] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[7]*fit_results[7]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[8]*fit_results[8]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
+		
+		//double Delta_gp = fit_results[9] * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[7])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << fit_results[9] * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		
 	}
 	
 	if(what==3)
@@ -567,6 +585,12 @@ int main(){
 		
 		cout << "\n\ng3_mean = " << g3_mean << "\ng3_min = " << g3_min << "\ng3_max = " << g3_max << "\nsigma = " << g3_sigma << " \nExperimental error: " << g3_sigma / g3_mean << "\n\ng3_errmean = " << g3_errmean << "\ng3_errmax = " << g3_errmax << "\nFit mean error: " << g3_errmean / g3_mean << "\nFit max error: " << g3_errmax / g3_mean << endl;
 		
+		double Delta_g3 = fit_results[8] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT );
+		
+		//double Delta_g3 = fit_results[8] * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g3 = " << Delta_g3 << "\nDelta x3 = " << fit_results[8] * Delta_g3 / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		
 	}
 	
 	if(what==4)
@@ -590,8 +614,8 @@ int main(){
 		minimizer->SetVariable(4, "c tt", 1.5e-9, 1e-10);
 		minimizer->SetVariable(5, "c tS", 1e-8, 1e-9); 
 		minimizer->SetVariable(6, "c SS", 3e-7, 1e-8);
-		minimizer->SetVariable(7, "c a", 2.2e-8, 1e-9);	
-		minimizer->SetVariable(8, "c ht", -5e-8, 1e-10);
+		minimizer->SetVariable(7, "c ht", -5e-8, 1e-10);
+		minimizer->SetVariable(8, "c a", 2.2e-8, 1e-9);	
 		minimizer->SetVariable(9, "yt 0", 0.9496, 1e-5);
 		
 		minimizer->Minimize();
@@ -642,6 +666,12 @@ int main(){
 		}
 		
 		cout << "\n\nyt_mean = " << yt_mean << "\nyt_min = " << yt_min << "\nyt_max = " << yt_max << "\nsigma = " << yt_sigma << " \nExperimental error: " << yt_sigma / yt_mean << "\n\nyt_errmean = " << yt_errmean << "\nyt_errmax = " << yt_errmax << "\nFit mean error: " << yt_errmean / yt_mean << "\nFit max error: " << yt_errmax / yt_mean << endl;
+		
+		double Delta_yt = fit_results[9] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[8]*fit_results[8]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT );
+		
+		//double Delta_yt = fit_results[9] * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yt = " << Delta_yt << "\nDelta y1 = " << fit_results[9] * Delta_yt / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 	}
 	
@@ -719,6 +749,12 @@ int main(){
 		}
 		
 		cout << "\n\nyb_mean = " << yb_mean << "\nyb_min = " << yb_min << "\nyb_max = " << yb_max << "\nsigma = " << yb_sigma << " \nExperimental error: " << yb_sigma / yb_mean << "\n\nyb_errmean = " << yb_errmean << "\nyb_errmax = " << yb_errmax << "\nFit mean error: " << yb_errmean / yb_mean << "\nFit max error: " << yb_errmax / yb_mean << endl;
+		
+		double Delta_yb = fit_results[10] * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_mbmb_EXPT_UNC_hi*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT/SMDR_mbmb_EXPT + fit_results[1]*fit_results[1]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[2]*fit_results[2]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[3]*fit_results[3]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[4]*fit_results[4]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT );
+		
+		//double Delta_yb = fit_results[10] * ( TMath::Abs(fit_results[0])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[1])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[2])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[3])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[4])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yb = " << Delta_yb << "\nDelta y2 = " << fit_results[10] * Delta_yb / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 	}	
 	
