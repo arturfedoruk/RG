@@ -15,6 +15,8 @@ using namespace std;
 #include "my_Fit_Inputs.cpp"
 
 int main(){
+	
+	#include "smdr_pdg_2025.h"
 
 	TFile *file = new TFile("random_data.root","recreate");
 	

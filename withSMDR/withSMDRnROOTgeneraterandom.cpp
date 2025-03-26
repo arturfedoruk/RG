@@ -20,6 +20,8 @@ using namespace std;
 
 int main(){
 	
+	#include "smdr_pdg_2025.h"
+	
 	/*
 	int seed;
 	ifstream lastSeed("lastSeed.txt");
