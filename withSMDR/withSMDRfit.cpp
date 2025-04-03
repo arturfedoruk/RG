@@ -219,6 +219,8 @@ int main(){
 		treename_assess_temp = treename_assess_default;
 	}
 	
+	ofstream outfile(("fit_outputs/output_" + treename_temp + ".txt").c_str(), ios::app | ios::out);
+	
 	const char* filename = filename_temp.c_str();
 	const char* treename = treename_temp.c_str();
 	const char* treename_assess = treename_assess_temp.c_str();
@@ -255,7 +257,7 @@ int main(){
 	cin >> what;
 	
 	if(what==6)
-	{
+	{	
 		tree->SetBranchAddress("lambda",&lambda);
 
 		ROOT::Math::Minimizer* minimizer = ROOT::Math::Factory::CreateMinimizer("Minuit2", "Migrad");			
@@ -285,11 +287,7 @@ int main(){
 		minimizer->SetVariable(15, "lambda 0", 0.127, 3e-5);
 		
 		minimizer->Minimize();
-		const double* fit_results = minimizer->X(); 
-		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[15];
-		for (int k = 0; k < 15; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
+		const double* fit_results = minimizer->X();
 		
 		double lambda_0 = fit_results[15];
 		
@@ -299,6 +297,8 @@ int main(){
 		//double Delta_lambda = lambda_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[12])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[13])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[14])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta lambda = " << Delta_lambda << "\nDelta z = " << Delta_lambda / (16. * TMath::Pi()*TMath::Pi()) << endl;
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta lambda = " << Delta_lambda << "\nDelta z = " << Delta_lambda / (16. * TMath::Pi()*TMath::Pi()) << endl;
 		
 		// Assessing
 		
@@ -344,7 +344,17 @@ int main(){
 		
 		}
 		
-		cout << "\n\nlambda_mean = " << lambda_0 << "\nlambda_min = " << lambda_min << "\nlambda_max = " << lambda_max << "\nsigma = " << Delta_lambda << " \nParametric error: " << Delta_lambda / lambda_0 << "\n\nlambda_errmean = " << lambda_errmean << "\nlambda_errmax = " << lambda_errmax << "\nFit mean error: " << lambda_errmean / lambda_0 << "\nFit max error: " << lambda_errmax / lambda_0 << endl;
+		cout << "\n\nlambda_mean = " << lambda_0 << "\nlambda_min = " << lambda_min << "\nlambda_max = " << lambda_max << "\nsigma = " << Delta_lambda << " \nParametric error: " << Delta_lambda / lambda_0 << "\n\nlambda_errmean = " << lambda_errmean << "\nlambda_errmax = " << lambda_errmax << "\nFit mean error: " << lambda_errmean / lambda_0 << "\nFit max error: " << lambda_errmax / lambda_0 << endl; 
+		
+		outfile << "\nParametric error: " << Delta_lambda / lambda_0 << "\nlambda_errmean = " << lambda_errmean << "\nlambda_errmax = " << lambda_errmax << "\nFit mean error: " << lambda_errmean / lambda_0 << "\nFit max error: " << lambda_errmax / lambda_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[15];
+		for (int k = 0; k < 15; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_lambda / lambda_0 << ", " << lambda_errmean / lambda_0 << ", " << lambda_errmax / lambda_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[15];
+		for (int k = 0; k < 15; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_lambda / lambda_0 << ", " << lambda_errmean / lambda_0 << ", " << lambda_errmax / lambda_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
 		
 	}
 	
@@ -378,10 +388,6 @@ int main(){
 		minimizer->Minimize();
 		const double* fit_results = minimizer->X(); 
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[11];
-		for (int k = 0; k < 11; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
-		
 		double g_0 = fit_results[11];
 		
 		//Propogation of errors
@@ -391,6 +397,8 @@ int main(){
 		//double Delta_g = g_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[9])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[10])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x1 = " << 5.* g_0 * Delta_g / (24. * TMath::Pi()*TMath::Pi()) << endl; 
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x1 = " << 5.* g_0 * Delta_g / (24. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -436,7 +444,17 @@ int main(){
 		
 		}
 		
-		cout << "\n\ng_mean = " << g_0 << "\ng_min = " << g_min << "\ng_max = " << g_max << "\nsigma = " << Delta_g << " \nParametric error: " << Delta_g / g_0 << "\n\ng_errmean = " << g_errmean << "\ng_errmax = " << g_errmax << "\nFit mean error: " << g_errmean / g_0 << "\nFit max error: " << g_errmax / g_0 << endl;
+		cout << "\n\ng_mean = " << g_0 << "\ng_min = " << g_min << "\ng_max = " << g_max << "\nsigma = " << Delta_g << " \nParametric error: " << Delta_g / g_0 << "\n\ng_errmean = " << g_errmean << "\ng_errmax = " << g_errmax << "\nFit mean error: " << g_errmean / g_0 << "\nFit max error: " << g_errmax / g_0 << endl; 
+		
+		outfile << "\nParametric error: " << Delta_g / g_0 << "\ng_errmean = " << g_errmean << "\ng_errmax = " << g_errmax << "\nFit mean error: " << g_errmean / g_0 << "\nFit max error: " << g_errmax / g_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[11];
+		for (int k = 0; k < 11; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_g / g_0 << ", " << g_errmean / g_0 << ", " << g_errmax / g_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[11];
+		for (int k = 0; k < 11; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_g / g_0 << ", " << g_errmean / g_0 << ", " << g_errmax / g_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
 		
 	}
 	
@@ -468,10 +486,6 @@ int main(){
 		minimizer->Minimize();
 		const double* fit_results = minimizer->X();
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[9];
-		for (int k = 0; k < 9; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
-		
 		double gp_0 = fit_results[9];
 		
 		//Propogation of errors
@@ -480,7 +494,9 @@ int main(){
 		
 		//double Delta_gp = gp_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[7])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << gp_0 * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << gp_0 * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl;
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << gp_0 * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -526,7 +542,17 @@ int main(){
 		
 		}
 		
-		cout << "\n\ngp_mean = " << gp_0 << "\ngp_min = " << gp_min << "\ngp_max = " << gp_max << "\nsigma = " << Delta_gp << " \nParametric error: " << Delta_gp / gp_0 << "\n\ngp_errmean = " << gp_errmean << "\ngp_errmax = " << gp_errmax << "\nFit mean error: " << gp_errmean / gp_0 << "\nFit max error: " << gp_errmax / gp_0 << endl;
+		cout << "\n\ngp_mean = " << gp_0 << "\ngp_min = " << gp_min << "\ngp_max = " << gp_max << "\nsigma = " << Delta_gp << " \nParametric error: " << Delta_gp / gp_0 << "\n\ngp_errmean = " << gp_errmean << "\ngp_errmax = " << gp_errmax << "\nFit mean error: " << gp_errmean / gp_0 << "\nFit max error: " << gp_errmax / gp_0 << endl; 
+		
+		outfile << "\nParametric error: " << Delta_gp / gp_0 << "\ngp_errmean = " << gp_errmean << "\ngp_errmax = " << gp_errmax << "\nFit mean error: " << gp_errmean / gp_0 << "\nFit max error: " << gp_errmax / gp_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[9];
+		for (int k = 0; k < 9; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_gp / gp_0 << ", " << gp_errmean / gp_0 << ", " << gp_errmax / gp_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[9];
+		for (int k = 0; k < 9; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_gp / gp_0 << ", " << gp_errmean / gp_0 << ", " << gp_errmax / gp_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
 		
 	}
 	
@@ -557,10 +583,6 @@ int main(){
 		minimizer->Minimize();
 		const double* fit_results = minimizer->X();
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[8];
-		for (int k = 0; k < 8; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
-		
 		double g3_0 = fit_results[8];
 		
 		//Propogation of errors
@@ -570,6 +592,8 @@ int main(){
 		//double Delta_g3 = g3_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g3 = " << Delta_g3 << "\nDelta x3 = " << g3_0 * Delta_g3 / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g3 = " << Delta_g3 << "\nDelta x3 = " << g3_0 * Delta_g3 / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -615,7 +639,17 @@ int main(){
 		
 		}
 		
-		cout << "\n\ng3_mean = " << g3_0 << "\ng3_min = " << g3_min << "\ng3_max = " << g3_max << "\nsigma = " << Delta_g3 << " \nParametric error: " << Delta_g3 / g3_0 << "\n\ng3_errmean = " << g3_errmean << "\ng3_errmax = " << g3_errmax << "\nFit mean error: " << g3_errmean / g3_0 << "\nFit max error: " << g3_errmax / g3_0 << endl;
+		cout << "\n\ng3_mean = " << g3_0 << "\ng3_min = " << g3_min << "\ng3_max = " << g3_max << "\nsigma = " << Delta_g3 << " \nParametric error: " << Delta_g3 / g3_0 << "\n\ng3_errmean = " << g3_errmean << "\ng3_errmax = " << g3_errmax << "\nFit mean error: " << g3_errmean / g3_0 << "\nFit max error: " << g3_errmax / g3_0 << endl; 
+		
+		outfile << "\nParametric error: " << Delta_g3 / g3_0 << "\ng3_errmean = " << g3_errmean << "\ng3_errmax = " << g3_errmax << "\nFit mean error: " << g3_errmean / g3_0 << "\nFit max error: " << g3_errmax / g3_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[8];
+		for (int k = 0; k < 8; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_g3 / g3_0 << ", " << g3_errmean / g3_0 << ", " << g3_errmax / g3_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[8];
+		for (int k = 0; k < 8; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_g3 / g3_0 << ", " << g3_errmean / g3_0 << ", " << g3_errmax / g3_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
 		
 	}
 	
@@ -647,10 +681,6 @@ int main(){
 		minimizer->Minimize();
 		const double* fit_results = minimizer->X();
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[9];
-		for (int k = 0; k < 9; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
-		
 		double yt_0 = fit_results[9];
 		
 		//Propogation of errors
@@ -660,6 +690,8 @@ int main(){
 		//double Delta_yt = yt_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yt = " << Delta_yt << "\nDelta y1 = " << yt_0 * Delta_yt / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yt = " << Delta_yt << "\nDelta y1 = " << yt_0 * Delta_yt / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -705,7 +737,17 @@ int main(){
 		
 		}
 		
-		cout << "\n\nyt_mean = " << yt_0 << "\nyt_min = " << yt_min << "\nyt_max = " << yt_max << "\nsigma = " << Delta_yt << " \nParametric error: " << Delta_yt / yt_0 << "\n\nyt_errmean = " << yt_errmean << "\nyt_errmax = " << yt_errmax << "\nFit mean error: " << yt_errmean / yt_0 << "\nFit max error: " << yt_errmax / yt_0 << endl;
+		cout << "\n\nyt_mean = " << yt_0 << "\nyt_min = " << yt_min << "\nyt_max = " << yt_max << "\nsigma = " << Delta_yt << " \nParametric error: " << Delta_yt / yt_0 << "\n\nyt_errmean = " << yt_errmean << "\nyt_errmax = " << yt_errmax << "\nFit mean error: " << yt_errmean / yt_0 << "\nFit max error: " << yt_errmax / yt_0 << endl; 
+		
+		outfile << "\nParametric error: " << Delta_yt / yt_0 << "\nyt_errmean = " << yt_errmean << "\nyt_errmax = " << yt_errmax << "\nFit mean error: " << yt_errmean / yt_0 << "\nFit max error: " << yt_errmax / yt_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[9];
+		for (int k = 0; k < 9; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_yt / yt_0 << ", " << yt_errmean / yt_0 << ", " << yt_errmax / yt_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[9];
+		for (int k = 0; k < 9; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_yt / yt_0 << ", " << yt_errmean / yt_0 << ", " << yt_errmax / yt_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
 		
 	}
 	
@@ -738,10 +780,6 @@ int main(){
 		minimizer->Minimize();
 		const double* fit_results = minimizer->X();
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nResults of fit: \n{ " << fit_results[10];
-		for (int k = 0; k < 10; k++) cout << ", " << fit_results[k];
-		cout << " }" << endl;
-		
 		double yb_0 = fit_results[10];
 		
 		//Propogation of errors
@@ -751,6 +789,8 @@ int main(){
 		//double Delta_yb = yb_0 * ( TMath::Abs(fit_results[0])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[1])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[2])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[3])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[4])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yb = " << Delta_yb << "\nDelta y2 = " << yb_0 * Delta_yb / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yb = " << Delta_yb << "\nDelta y2 = " << yb_0 * Delta_yb / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -796,9 +836,21 @@ int main(){
 		
 		}
 		
-		cout << "\n\nyb_mean = " << yb_0 << "\nyb_min = " << yb_min << "\nyb_max = " << yb_max << "\nsigma = " << Delta_yb << " \nParametric error: " << Delta_yb / yb_0 << "\n\nyb_errmean = " << yb_errmean << "\nyb_errmax = " << yb_errmax << "\nFit mean error: " << yb_errmean / yb_0 << "\nFit max error: " << yb_errmax / yb_0 << endl;
+		cout << "\n\nyb_mean = " << yb_0 << "\nyb_min = " << yb_min << "\nyb_max = " << yb_max << "\nsigma = " << Delta_yb << " \nParametric error: " << Delta_yb / yb_0 << "\n\nyb_errmean = " << yb_errmean << "\nyb_errmax = " << yb_errmax << "\nFit mean error: " << yb_errmean / yb_0 << "\nFit max error: " << yb_errmax / yb_0 << endl; 
 		
-	}	
+		outfile << "\nParametric error: " << Delta_yb / yb_0 << "\nyb_errmean = " << yb_errmean << "\nyb_errmax = " << yb_errmax << "\nFit mean error: " << yb_errmean / yb_0 << "\nFit max error: " << yb_errmax / yb_0 << endl; 
+		
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nFor table: \n{ " << fit_results[10];
+		for (int k = 0; k < 10; k++) cout << ", " << fit_results[k];
+		cout << ", " << Delta_yb / yb_0 << ", " << yb_errmean / yb_0 << ", " << yb_errmax / yb_0 << " }" << endl;
+		
+		outfile << "\nFor table: \n{ " << fit_results[10];
+		for (int k = 0; k < 10; k++) outfile << ", " << fit_results[k];
+		outfile << ", " << Delta_yb / yb_0 << ", " << yb_errmean / yb_0 << ", " << yb_errmax / yb_0 << " }\n++++++++++++++++++++++++++++++++++++++" << endl;
+		
+	}
+	
+	outfile.close();	
 	
 	return 0;
 
