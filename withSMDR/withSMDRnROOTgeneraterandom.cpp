@@ -17,6 +17,7 @@ using namespace std;
 #define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
 #include "my_Fit_Inputs.cpp"
+#include "loop_configs.cpp"
 
 int main(){
 	
@@ -40,13 +41,6 @@ int main(){
 	
 	TFile *file = new TFile("random_data.root", "UPDATE");
 	TTree *tree;
-	
-	float config_111111[9] = {0, 0, 0, 0, 0, 0, 1, 1} ; // for QCDQED_at_MZ & mbmb loop 0 doesn't exist
-	float config_222222[9] = {1, 1, 1, 1, 1, 1, 1, 1} ;
-	float config_333333[9] = {2, 2, 2, 2, 2, 2, 2, 2} ;
-	float config_333221[9] = {2, 2, 0, 2, 2, 0, 2, 1} ;
-	float config_444332[9] = {3, 2, 1, 2.5, 2.5, 1, 3, 2} ; 
-	float config_444333[9] = {3, 2, 2, 2.5, 2.5, 2, 3, 2} ; // for MZ & MW loop 3 doesn't exist
 	
 	int input_config, N;
 	
