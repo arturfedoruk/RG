@@ -19,8 +19,8 @@ TFile *file;
 TTree *tree;
 TTree *tree_assess;
 
-string filename_default = "net_data.root";
-string treename_default = "tree_222222_5,_:5_5_5_5_5_5_5";
+string filename_default = "net_data.root"; // net_datas/net_333221.root
+string treename_default = "tree_222222_5,_:5_5_5_5_5_5_5"; // tree_333221_5,_:5_5_5_5_5_5_5
 string treename_assess_default = "tree_222222_5,_:5_5_5_5_5_5_5";
 
 double alphaS, Mt, Mh, MZ, Delta, mbmb, GF, g, gp, g3, yt, yb, lambda;
@@ -396,9 +396,9 @@ int main(){
 		
 		//double Delta_g = g_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[9])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[10])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x1 = " << 5.* g_0 * Delta_g / (24. * TMath::Pi()*TMath::Pi()) << endl; 
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x2 = " << g_0 * Delta_g / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
-		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x1 = " << 5.* g_0 * Delta_g / (24. * TMath::Pi()*TMath::Pi()) << endl; 
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x2 = " << g_0 * Delta_g / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
@@ -494,9 +494,9 @@ int main(){
 		
 		//double Delta_gp = gp_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[7])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
-		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << gp_0 * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl;
+		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x1 = " << 5. * gp_0 * Delta_gp / (24. * TMath::Pi()*TMath::Pi()) << endl;
 		
-		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x2 = " << gp_0 * Delta_gp / (8. * TMath::Pi()*TMath::Pi()) << endl; 
+		outfile << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x1 = " << 5. * gp_0 * Delta_gp / (24. * TMath::Pi()*TMath::Pi()) << endl; 
 		
 		// Assessing
 		
