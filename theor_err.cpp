@@ -1,3 +1,4 @@
+// program that computes MSbar on different scales Q so that later Wolfram runs the result to 173.22 GeV to compute theoretical uncertainty
 #include "smdr.h"
 #include "iostream"
 #include "fstream"
@@ -5,13 +6,14 @@
 
 using namespace std;
 
-#include "my_Fit_Inputs.cpp"
+#include "loop_Fit_Inputs.cpp"
 #include "loop_configs.cpp"
 
 int main(){
 
 	#include "smdr_pdg_2025.h"	
-	
+
+	// where data is stored
 	ofstream output_file("for_theorerr.txt");
 	
 	double Q0 = 173.22;
@@ -32,7 +34,7 @@ int main(){
 			
 			#include "smdr_pdg_2025.h"
 			
-			my_Fit_Inputs (SMDR_Q_in,
+			loop_Fit_Inputs (SMDR_Q_in,
 				   SMDR_alphaS_MZ_EXPT,
 				   SMDR_alpha_EXPT,
 				   SMDR_GFermi_EXPT,
