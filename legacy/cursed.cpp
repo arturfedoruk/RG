@@ -1,3 +1,4 @@
+// first program i've written, is basically a cursed algorythm for computing MSbar with different loops. later direct.cpp was written, and this was really better
 #include "smdr.h"
 #include "iostream"
 #include "fstream"
