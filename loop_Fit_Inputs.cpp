@@ -2,7 +2,7 @@
 
 #define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
-int  my_Fit_Inputs (SMDR_REAL Q_target,
+int  loop_Fit_Inputs (SMDR_REAL Q_target,
                       SMDR_REAL alphaS_5_MZ_target,
                       SMDR_REAL alpha_target,
                       SMDR_REAL GFermi_target,
