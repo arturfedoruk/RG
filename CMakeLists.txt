@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.15...3.31)
 # This is your project statement. You should always list languages;
 # Listing the version is nice here since it sets lots of useful variables
 project(
-	withSMDR
+	RG
 	VERSION 1.0
 	LANGUAGES CXX)
 
@@ -51,21 +51,35 @@ set_target_properties(3vil PROPERTIES
 
 # define executables and the corresponding source files
 
-add_executable(withSMDRnROOTgeneraterandomV2 withSMDRnROOTgeneraterandom.cpp)
-add_executable(withSMDRnROOTinitrandom withSMDRnROOTinitrandom.cpp)
+add_executable(fit fit.cpp)
+add_executable(init_random init_random.cpp)
+add_executable(generate_random generate_random.cpp)
+add_executable(generate_net generate_net.cpp)
+add_executable(theor_err theor_err.cpp)
 
 
 # define how to link executables 
 
-target_link_libraries(withSMDRnROOTgeneraterandomV2  PUBLIC ${ROOT_LIBRARIES}
-                                                            ${ROOT_EXE_LINKER_FLAGS}
-							    smdr
-							    tsil
-							    3vil)	
-target_link_libraries(withSMDRnROOTinitrandom  PUBLIC ${ROOT_LIBRARIES}
-                                                            ${ROOT_EXE_LINKER_FLAGS}
-							    smdr
-							    tsil
-							    3vil)	
-
-
+target_link_libraries(fit  PUBLIC   ${ROOT_LIBRARIES}
+				    ${ROOT_EXE_LINKER_FLAGS}
+				    smdr
+				    tsil
+				    3vil)	
+target_link_libraries(init_random  PUBLIC ${ROOT_LIBRARIES}
+					  ${ROOT_EXE_LINKER_FLAGS}
+				          smdr
+	        			  tsil
+					  3vil)	
+target_link_libraries(generate_random  PUBLIC   ${ROOT_LIBRARIES}
+						${ROOT_EXE_LINKER_FLAGS}
+				          	smdr
+	        			  	tsil
+					  	3vil)	
+target_link_libraries(generate_net  PUBLIC   ${ROOT_LIBRARIES}
+						${ROOT_EXE_LINKER_FLAGS}
+				          	smdr
+	        			  	tsil
+					  	3vil)	
+target_link_libraries(theor_err  PUBLIC   smdr
+	        			  tsil
+					  3vil)	
