@@ -25,7 +25,7 @@ Double_t compute_MSbar  (const Double_t* pars) // Q_target, alphaS_5_MZ_target, 
 {
 	
 	float loop_config[8] = {pars[10],pars[11],pars[12],pars[13],pars[14],pars[15],pars[16],pars[17]};
-        my_Fit_Inputs (pars[0], pars[1], pars[2], pars[3], pars[4], pars[5], pars[6], pars[7], pars[8], pars[9], loop_config);        
+        loop_Fit_Inputs (pars[0], pars[1], pars[2], pars[3], pars[4], pars[5], pars[6], pars[7], pars[8], pars[9], loop_config);        
                       
 	switch (int(pars[18])){
 	case 1 : return SMDR_gp_in; break; // g
