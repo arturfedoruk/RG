@@ -1,5 +1,6 @@
+// first program to somewhat successfully extract parametric errors by minimizing the corresponding MSbar within the "cube of errors" of on-shell's. actually, gives pretty close results, but anyway is NOT rigorous
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRnMinuitHybrid.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` hybrid_minimization.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
@@ -14,8 +15,8 @@
 using namespace std;
 #define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
-#include "my_Fit_Inputs.cpp"
-
+#include "../loop_Fit_Inputs.cpp"
+#include "../smdr_pdg_2025.h"
 
 float n_of_sigmas = 1;
 
