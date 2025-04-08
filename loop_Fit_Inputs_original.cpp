@@ -1,5 +1,5 @@
 // version of SMDR_Fit_inputs with added loop customization and without particles lighter than b (all Qs are original)
-int  my_Fit_Inputs_original (SMDR_REAL Q_target,
+int  loop_Fit_Inputs_original (SMDR_REAL Q_target,
                       SMDR_REAL alphaS_5_MZ_target,
                       SMDR_REAL alpha_target,
                       SMDR_REAL GFermi_target,
@@ -12,7 +12,7 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
                       SMDR_REAL error_target,
                       float* loop_config)
 {
-  char funcname[] = "my_Fit_Inputs";
+  char funcname[] = "loop_Fit_Inputs_original";
   int j;
   SMDR_REAL vratio, v2ratio;
   SMDR_REAL KZ, Ka;
