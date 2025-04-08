@@ -1,5 +1,6 @@
+// program that computes MSbar for randomly generated on-shells. old computed data is not erased!
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRnROOTgeneraterandom.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` generate_random.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
@@ -14,16 +15,15 @@
 #include "TTree.h"
 #include "TFile.h"
 using namespace std;
-#define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
-#include "my_Fit_Inputs.cpp"
+#include "loop_Fit_Inputs.cpp"
 #include "loop_configs.cpp"
 
 int main(){
 	
 	#include "smdr_pdg_2025.h"
 	
-	/*
+	/* if you want to keep track of the last used seed (for some reason)
 	int seed;
 	ifstream lastSeed("lastSeed.txt");
 	if ( lastSeed.is_open() ) {
@@ -87,7 +87,7 @@ int main(){
 	cout << "\nGeneration will be performed using TRandom3 with seed " << seed << endl;
 	
 	double alphaS_MZ, alpha, GFermi, MZ, Mh, Mt, mbmb, Delta_alpha, g, gp, g3, yt, yb, lambda, x1, x2, x3, y1, y2, z;
-	tree->SetBranchAddress("seed",&seed);
+	tree->SetBranchAddress("seed",&seed); // writing seed for each entry for rigorosity
 	tree->SetBranchAddress("alphaS_MZ",&alphaS_MZ);
 	tree->SetBranchAddress("alpha",&alpha);
 	tree->SetBranchAddress("GFermi",&GFermi);
@@ -115,7 +115,8 @@ int main(){
 	
 	for (int ientry = 0; ientry < N; ientry++){
 		SMDR_Q_in = 173.22;
-	
+
+		//random on-shells!
 		alphaS_MZ = random_generator.Gaus(SMDR_alphaS_MZ_EXPT, SMDR_alphaS_MZ_EXPT_UNC);
 		alpha = random_generator.Gaus(SMDR_alpha_EXPT, SMDR_alpha_EXPT_UNC);
 		GFermi = random_generator.Gaus(SMDR_GFermi_EXPT, SMDR_GFermi_EXPT_UNC);
@@ -125,7 +126,7 @@ int main(){
 		mbmb = random_generator.Gaus(SMDR_mbmb_EXPT, SMDR_mbmb_EXPT_UNC_hi);
 		Delta_alpha = random_generator.Gaus(SMDR_Delta_alpha_had_5_MZ_EXPT, SMDR_Delta_alpha_had_5_MZ_EXPT_UNC);
 		
-		my_Fit_Inputs (SMDR_Q_in, 
+		loop_Fit_Inputs (SMDR_Q_in, 
 				alphaS_MZ, 
 				alpha, GFermi, 
 				MZ, Mh, Mt, 
