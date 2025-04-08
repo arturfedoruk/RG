@@ -1,3 +1,4 @@
+// program that computes MSbar with different loops. however, uncertainties were needed, so more comlex programs were introduced
 #include "smdr.h"
 #include "iostream"
 #include "fstream"
@@ -6,12 +7,12 @@
 #define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 using namespace std; //based
 
-#include "my_Fit_Inputs.cpp"
-#include "loop_configs.cpp"
+#include "../loop_Fit_Inputs.cpp"
+#include "../loop_configs.cpp"
 
 int main(){
 
-	ofstream output_file("withSMDRdirectOutput.txt");
+	ofstream output_file("directOutput.txt");
 	output_file << "\n++++++++++++++++++++++++++++++++++++++++\n DIRECT ALGORITHM \n\n";
 	
 	SMDR_REAL temp1 = 0;
@@ -34,7 +35,7 @@ int main(){
 		SMDR_mbmb_EXPT = 4.18; // from smdr_pdg_2021.h, there from Review of Particle Properties 2020 
 		
 		// my_Fit_Inputs allows loop customization and is quicker due zero mass of unnecessary particles
-		my_Fit_Inputs (SMDR_Q_in,
+		loop_Fit_Inputs (SMDR_Q_in,
 		           SMDR_alphaS_5_MZ_EXPT,
 		           SMDR_alpha_EXPT,
 		           SMDR_GFermi_EXPT,
