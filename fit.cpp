@@ -1,5 +1,6 @@
+// program that makes fits of MSbar quantities provided data to be trained on, and then assesses the fit on provided assessing data
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRfit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` fit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
@@ -19,8 +20,9 @@ TFile *file;
 TTree *tree;
 TTree *tree_assess;
 
-string filename_default = "net_data.root"; // net_datas/net_333221.root
-string treename_default = "tree_222222_5,_:5_5_5_5_5_5_5"; // tree_333221_5,_:5_5_5_5_5_5_5
+// default file, training tree and assessing tree (used exactly it while trying the programm)
+string filename_default = "net_data.root";
+string treename_default = "tree_222222_5,_:5_5_5_5_5_5_5";
 string treename_assess_default = "tree_222222_5,_:5_5_5_5_5_5_5";
 
 double alphaS, Mt, Mh, MZ, Delta, mbmb, GF, g, gp, g3, yt, yb, lambda;
@@ -33,6 +35,7 @@ double g3_sigma = 0.004;
 double yt_sigma = 0.0017;
 double yb_sigma = 6.7e-5;
 
+// fitting function for lambda
 Double_t fit_lambda(Double_t* xx, const Double_t* par){
 	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
 	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
@@ -44,6 +47,7 @@ Double_t fit_lambda(Double_t* xx, const Double_t* par){
 	return par[15] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltah*deltah + par[7]*deltah*deltat + par[8]*deltaS*deltaS + par[9]*deltah*deltaS + par[10]*deltat*deltat*deltat + par[11]*deltat*deltat*deltaS + par[12]*deltaa + par[13]*deltab + par[14]*deltaGF);
 }
 
+// function to minimize while fitting lambda
 Double_t sum_squares_lambda(const Double_t* pars){
 	Double_t sum = 0;
 	Double_t onshell[7];
@@ -207,10 +211,13 @@ int main(){
 	cin >> if_default_files;
 	string filename_temp, treename_temp, treename_assess_temp;
 	if (if_default_files == 'n'){
+		// entering name of the file where trees are stored, ...
 		cout << "Enter file name " << endl;
 		cin >> filename_temp;
+		// ... tree for training fit, ...
 		cout << "Enter name of tree to learn " << endl;
 		cin >> treename_temp;
+		// ... and tree for assesing (i used the same tree, but can potentially be different ofc) 
 		cout << "Enter name of tree to assess " << endl;
 		cin >> treename_assess_temp;
 	} else {
@@ -218,7 +225,8 @@ int main(){
 		treename_temp = treename_default;
 		treename_assess_temp = treename_assess_default;
 	}
-	
+
+	// file where results of the fit (in needed for paper format) will be stored
 	ofstream outfile(("fit_outputs/output_" + treename_temp + ".txt").c_str(), ios::app | ios::out);
 	
 	const char* filename = filename_temp.c_str();
@@ -292,7 +300,7 @@ int main(){
 		double lambda_0 = fit_results[15];
 		
 		// Propogation of errors
-		
+		// absolute error of lambda
 		double Delta_lambda = lambda_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[12]*fit_results[12]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[13]*fit_results[13]*SMDR_mbmb_EXPT_UNC_hi*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT/SMDR_mbmb_EXPT + fit_results[14]*fit_results[14]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
 		//double Delta_lambda = lambda_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[12])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[13])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[14])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
 		
@@ -305,10 +313,10 @@ int main(){
 		cout << endl << "\n++++++++++++++++++++++++++++++++++++++\nASSESSING\n" << endl;
 		tree_assess->SetBranchAddress("lambda",&lambda);
 		
-		double lambda_min = lambda_0;
-		double lambda_max = lambda_0;
-		double lambda_errmean = 0;
-		double lambda_errmax = 0;
+		double lambda_min = lambda_0; // minimal value of lambda on the assessing tree
+		double lambda_max = lambda_0; // maximal value of lambda on the assessing tree
+		double lambda_errmean = 0; // mean abs error of the fit on the assessing tree
+		double lambda_errmax = 0; // max abs error of the fit on the assessing tree
 		
 		double lambda_fromfit, lambda_err;
 		
@@ -338,7 +346,8 @@ int main(){
 			lambda_errmean += lambda_err / N;
 			
 			if (lambda_err > lambda_errmax) lambda_errmax = lambda_err;
-			
+
+			// counter (idk, the process is quite fast, but i added this)
 			cout << "Processed event: " << ientry+1 << "/" << N << "\r";
 			cout.flush();
 		
