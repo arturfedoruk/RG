@@ -4,8 +4,6 @@
 
 #include "smdr.h"
 #include "iostream"
-#include "fstream"
-#include "cstdio"
 #include "string"
 #include "TROOT.h"
 #include "TH1D.h"

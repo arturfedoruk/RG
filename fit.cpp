@@ -2,7 +2,6 @@
 // to launch the program: 
 // g++ `root-config --cflags` fit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
-#include "smdr.h"
 #include "iostream"
 #include "fstream"
 #include "string"
@@ -14,6 +13,8 @@
 #include "Math/Factory.h"
 #include "Math/Functor.h"
 #include "TError.h"
+
+#include "smdr_pdg_2025.h"
 using namespace std;
 
 TFile *file;
@@ -37,13 +38,13 @@ double yb_sigma = 6.7e-5;
 
 // fitting function for lambda
 Double_t fit_lambda(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
-	double deltab = (xx[5] - SMDR_mbmb_EXPT)/SMDR_mbmb_EXPT;
-	double deltaGF = (xx[6] - SMDR_GFermi_EXPT)/ SMDR_GFermi_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltaa = (xx[4] - PDG_Delta_alpha_had_5_MZ)/PDG_Delta_alpha_had_5_MZ;
+	double deltab = (xx[5] - PDG_mbmb)/PDG_mbmb;
+	double deltaGF = (xx[6] - PDG_GFermi)/ PDG_GFermi;
 	return par[15] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltah*deltah + par[7]*deltah*deltat + par[8]*deltaS*deltaS + par[9]*deltah*deltaS + par[10]*deltat*deltat*deltat + par[11]*deltat*deltat*deltaS + par[12]*deltaa + par[13]*deltab + par[14]*deltaGF);
 }
 
@@ -66,12 +67,12 @@ Double_t sum_squares_lambda(const Double_t* pars){
 }
 
 Double_t fit_g(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
-	double deltaGF = (xx[6] - SMDR_GFermi_EXPT)/ SMDR_GFermi_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltaa = (xx[4] - PDG_Delta_alpha_had_5_MZ)/PDG_Delta_alpha_had_5_MZ;
+	double deltaGF = (xx[6] - PDG_GFermi)/ PDG_GFermi;
 	return par[11] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltaS*deltaS + par[7]*deltaZ*deltaZ + par[8]*deltaZ*deltat + par[9]*deltaa + par[10]*deltaGF);
 }
 
@@ -93,12 +94,12 @@ Double_t sum_squares_g(const Double_t* pars){
 }
 
 Double_t fit_gp(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
-	double deltaGF = (xx[6] - SMDR_GFermi_EXPT)/ SMDR_GFermi_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltaa = (xx[4] - PDG_Delta_alpha_had_5_MZ)/PDG_Delta_alpha_had_5_MZ;
+	double deltaGF = (xx[6] - PDG_GFermi)/ PDG_GFermi;
 	return par[9] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltaZ*deltat + par[6]*deltaZ*deltaZ + par[7]*deltaa + par[8]*deltaGF);
 }
 
@@ -120,13 +121,13 @@ Double_t sum_squares_gp(const Double_t* pars){
 }
 
 Double_t fit_g3(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
-	double deltab = (xx[5] - SMDR_mbmb_EXPT)/SMDR_mbmb_EXPT;
-	double deltaGF = (xx[6] - SMDR_GFermi_EXPT)/ SMDR_GFermi_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltaa = (xx[4] - PDG_Delta_alpha_had_5_MZ)/PDG_Delta_alpha_had_5_MZ;
+	double deltab = (xx[5] - PDG_mbmb)/PDG_mbmb;
+	double deltaGF = (xx[6] - PDG_GFermi)/ PDG_GFermi;
 	return par[8] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltaS*deltaS + par[7]*deltaS*deltaS*deltaS);
 }
 
@@ -148,11 +149,11 @@ Double_t sum_squares_g3(const Double_t* pars){
 }
 
 Double_t fit_yt(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltaa = (xx[4] - SMDR_Delta_alpha_had_5_MZ_EXPT)/SMDR_Delta_alpha_had_5_MZ_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltaa = (xx[4] - PDG_Delta_alpha_had_5_MZ)/PDG_Delta_alpha_had_5_MZ;
 	return par[9] * (1 + par[0]*deltah + par[1]*deltat + par[2]*deltaZ + par[3]*deltaS + par[4]*deltat*deltat + par[5]*deltat*deltaS + par[6]*deltaS*deltaS + par[7]*deltah*deltat + par[8]*deltaa);
 }
 
@@ -175,11 +176,11 @@ Double_t sum_squares_yt(const Double_t* pars){
 
 
 Double_t fit_yb(Double_t* xx, const Double_t* par){
-	double deltah = (xx[0] - SMDR_Mh_EXPT)/SMDR_Mh_EXPT;
-	double deltat = (xx[1] - SMDR_Mt_EXPT)/SMDR_Mt_EXPT;
-	double deltaZ = (xx[2] - SMDR_MZ_EXPT)/SMDR_MZ_EXPT;
-	double deltaS = (xx[3] - SMDR_alphaS_MZ_EXPT)/SMDR_alphaS_MZ_EXPT;
-	double deltab = (xx[5] - SMDR_mbmb_EXPT)/SMDR_mbmb_EXPT;
+	double deltah = (xx[0] - PDG_Mh)/PDG_Mh;
+	double deltat = (xx[1] - PDG_Mt)/PDG_Mt;
+	double deltaZ = (xx[2] - PDG_MZ)/PDG_MZ;
+	double deltaS = (xx[3] - PDG_alphaS_MZ)/PDG_alphaS_MZ;
+	double deltab = (xx[5] - PDG_mbmb)/PDG_mbmb;
 	return par[10] * (1 + par[0]*deltab + par[1]*deltah + par[2]*deltat + par[3]*deltaZ + par[4]*deltaS + par[5]*deltab*deltab + par[6]*deltab*deltaS + par[7]*deltaS*deltaS + par[8]*deltat*deltaS + par[9]*deltaS*deltaS*deltaS);
 }
 
@@ -202,9 +203,7 @@ Double_t sum_squares_yb(const Double_t* pars){
 
 //------------------------------------------------------------------------------
 //-----------------MAIN---------------------------------------------------------
-int main(){
-
-	#include "smdr_pdg_2025.h"	
+int main(){	
 
 	char if_default_files;
 	cout << "Use default files? y/n" << endl;
@@ -301,8 +300,8 @@ int main(){
 		
 		// Propogation of errors
 		// absolute error of lambda
-		double Delta_lambda = lambda_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[12]*fit_results[12]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[13]*fit_results[13]*SMDR_mbmb_EXPT_UNC_hi*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT/SMDR_mbmb_EXPT + fit_results[14]*fit_results[14]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
-		//double Delta_lambda = lambda_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[12])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[13])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[14])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		double Delta_lambda = lambda_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[1]*fit_results[1]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[2]*fit_results[2]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[3]*fit_results[3]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ + fit_results[12]*fit_results[12]*PDG_Delta_alpha_had_5_MZ_UNC*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ/PDG_Delta_alpha_had_5_MZ + fit_results[13]*fit_results[13]*PDG_mbmb_UNC_hi*PDG_mbmb_UNC_hi/PDG_mbmb/PDG_mbmb + fit_results[14]*fit_results[14]*PDG_GFermi_UNC*PDG_GFermi_UNC/PDG_GFermi/PDG_GFermi );
+		//double Delta_lambda = lambda_0 * ( TMath::Abs(fit_results[0])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[1])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[2])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[3])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ + TMath::Abs(fit_results[12])*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ + TMath::Abs(fit_results[13])*PDG_mbmb_UNC_hi/PDG_mbmb + TMath::Abs(fit_results[14])*PDG_GFermi_UNC/PDG_GFermi );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta lambda = " << Delta_lambda << "\nDelta z = " << Delta_lambda / (16. * TMath::Pi()*TMath::Pi()) << endl;
 		
@@ -401,9 +400,9 @@ int main(){
 		
 		//Propogation of errors
 		
-		double Delta_g = g_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[9]*fit_results[9]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[10]*fit_results[10]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
+		double Delta_g = g_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[1]*fit_results[1]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[2]*fit_results[2]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[3]*fit_results[3]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ + fit_results[9]*fit_results[9]*PDG_Delta_alpha_had_5_MZ_UNC*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ/PDG_Delta_alpha_had_5_MZ + fit_results[10]*fit_results[10]*PDG_GFermi_UNC*PDG_GFermi_UNC/PDG_GFermi/PDG_GFermi );
 		
-		//double Delta_g = g_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[9])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[10])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		//double Delta_g = g_0 * ( TMath::Abs(fit_results[0])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[1])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[2])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[3])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ + TMath::Abs(fit_results[9])*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ + TMath::Abs(fit_results[10])*PDG_GFermi_UNC/PDG_GFermi );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g = " << Delta_g << "\nDelta x2 = " << g_0 * Delta_g / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
@@ -499,9 +498,9 @@ int main(){
 		
 		//Propogation of errors
 		
-		double Delta_gp = gp_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[7]*fit_results[7]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT + fit_results[8]*fit_results[8]*SMDR_GFermi_EXPT_UNC*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT/SMDR_GFermi_EXPT );
+		double Delta_gp = gp_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[1]*fit_results[1]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[2]*fit_results[2]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[3]*fit_results[3]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ + fit_results[7]*fit_results[7]*PDG_Delta_alpha_had_5_MZ_UNC*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ/PDG_Delta_alpha_had_5_MZ + fit_results[8]*fit_results[8]*PDG_GFermi_UNC*PDG_GFermi_UNC/PDG_GFermi/PDG_GFermi );
 		
-		//double Delta_gp = gp_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[7])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_GFermi_EXPT_UNC/SMDR_GFermi_EXPT );
+		//double Delta_gp = gp_0 * ( TMath::Abs(fit_results[0])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[1])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[2])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[3])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ + TMath::Abs(fit_results[7])*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ + TMath::Abs(fit_results[8])*PDG_GFermi_UNC/PDG_GFermi );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta gp = " << Delta_gp << "\nDelta x1 = " << 5. * gp_0 * Delta_gp / (24. * TMath::Pi()*TMath::Pi()) << endl;
 		
@@ -596,9 +595,9 @@ int main(){
 		
 		//Propogation of errors
 		
-		double Delta_g3 = g3_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT );
+		double Delta_g3 = g3_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[1]*fit_results[1]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[2]*fit_results[2]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[3]*fit_results[3]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ );
 		
-		//double Delta_g3 = g3_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
+		//double Delta_g3 = g3_0 * ( TMath::Abs(fit_results[0])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[1])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[2])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[3])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta g3 = " << Delta_g3 << "\nDelta x3 = " << g3_0 * Delta_g3 / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
@@ -694,9 +693,9 @@ int main(){
 		
 		//Propogation of errors
 		
-		double Delta_yt = yt_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[1]*fit_results[1]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[2]*fit_results[2]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[3]*fit_results[3]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT + fit_results[8]*fit_results[8]*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT/SMDR_Delta_alpha_had_5_MZ_EXPT );
+		double Delta_yt = yt_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[1]*fit_results[1]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[2]*fit_results[2]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[3]*fit_results[3]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ + fit_results[8]*fit_results[8]*PDG_Delta_alpha_had_5_MZ_UNC*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ/PDG_Delta_alpha_had_5_MZ );
 		
-		//double Delta_yt = yt_0 * ( TMath::Abs(fit_results[0])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[1])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[2])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[3])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT + TMath::Abs(fit_results[8])*SMDR_Delta_alpha_had_5_MZ_EXPT_UNC/SMDR_Delta_alpha_had_5_MZ_EXPT );
+		//double Delta_yt = yt_0 * ( TMath::Abs(fit_results[0])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[1])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[2])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[3])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ + TMath::Abs(fit_results[8])*PDG_Delta_alpha_had_5_MZ_UNC/PDG_Delta_alpha_had_5_MZ );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yt = " << Delta_yt << "\nDelta y1 = " << yt_0 * Delta_yt / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
@@ -793,9 +792,9 @@ int main(){
 		
 		//Propogation of errors
 		
-		double Delta_yb = yb_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*SMDR_mbmb_EXPT_UNC_hi*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT/SMDR_mbmb_EXPT + fit_results[1]*fit_results[1]*SMDR_Mh_EXPT_UNC*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT/SMDR_Mh_EXPT + fit_results[2]*fit_results[2]*SMDR_Mt_EXPT_UNC*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT/SMDR_Mt_EXPT + fit_results[3]*fit_results[3]*SMDR_MZ_EXPT_UNC*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT/SMDR_MZ_EXPT + fit_results[4]*fit_results[4]*SMDR_alphaS_MZ_EXPT_UNC*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT/SMDR_alphaS_MZ_EXPT );
+		double Delta_yb = yb_0 * TMath::Sqrt( fit_results[0]*fit_results[0]*PDG_mbmb_UNC_hi*PDG_mbmb_UNC_hi/PDG_mbmb/PDG_mbmb + fit_results[1]*fit_results[1]*PDG_Mh_UNC*PDG_Mh_UNC/PDG_Mh/PDG_Mh + fit_results[2]*fit_results[2]*PDG_Mt_UNC*PDG_Mt_UNC/PDG_Mt/PDG_Mt + fit_results[3]*fit_results[3]*PDG_MZ_UNC*PDG_MZ_UNC/PDG_MZ/PDG_MZ + fit_results[4]*fit_results[4]*PDG_alphaS_MZ_UNC*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ/PDG_alphaS_MZ );
 		
-		//double Delta_yb = yb_0 * ( TMath::Abs(fit_results[0])*SMDR_mbmb_EXPT_UNC_hi/SMDR_mbmb_EXPT + TMath::Abs(fit_results[1])*SMDR_Mh_EXPT_UNC/SMDR_Mh_EXPT + TMath::Abs(fit_results[2])*SMDR_Mt_EXPT_UNC/SMDR_Mt_EXPT + TMath::Abs(fit_results[3])*SMDR_MZ_EXPT_UNC/SMDR_MZ_EXPT + TMath::Abs(fit_results[4])*SMDR_alphaS_MZ_EXPT_UNC/SMDR_alphaS_MZ_EXPT );
+		//double Delta_yb = yb_0 * ( TMath::Abs(fit_results[0])*PDG_mbmb_UNC_hi/PDG_mbmb + TMath::Abs(fit_results[1])*PDG_Mh_UNC/PDG_Mh + TMath::Abs(fit_results[2])*PDG_Mt_UNC/PDG_Mt + TMath::Abs(fit_results[3])*PDG_MZ_UNC/PDG_MZ + TMath::Abs(fit_results[4])*PDG_alphaS_MZ_UNC/PDG_alphaS_MZ );
 		
 		cout << "\n++++++++++++++++++++++++++++++++++++++\nPropogation of errors: \nDelta yb = " << Delta_yb << "\nDelta y2 = " << yb_0 * Delta_yb / (8. * TMath::Pi()*TMath::Pi()) << endl; 
 		
