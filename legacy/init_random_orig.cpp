@@ -1,5 +1,6 @@
+// basically init_random but with loop_Fit_Inputs_original()
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRnROOTinitrandom.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` init_random_orig.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
@@ -10,16 +11,13 @@
 #include "TTree.h"
 #include "TFile.h"
 using namespace std;
-#define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
-#include "my_Fit_Inputs.cpp"
-#include "loop_configs.cpp"
+#include "../loop_configs.cpp"
+#include "../loop_Fit_Inputs_original.cpp"
 
 int main(){
-	
-	#include "smdr_pdg_2025.h"
 
-	TFile *file = new TFile("random_data.root","recreate");
+	TFile *file = new TFile("random_data_orig.root","recreate");
 	
 	const int nconfigs = 6;
 	
@@ -41,7 +39,7 @@ int main(){
 	double pi = 3.14159265359;
 	
 	for (int itree = 0; itree < nconfigs; itree++){
-		SMDR_Q_in = 173.22;
+		SMDR_Q_in = 200;
 		
 		cout << "Creating " << tree_names[itree] << endl;
 		
@@ -77,7 +75,7 @@ int main(){
 		mbmb = SMDR_mbmb_EXPT;
 		Delta_alpha = SMDR_Delta_alpha_had_5_MZ_EXPT;
 		
-		my_Fit_Inputs (SMDR_Q_in,
+		loop_Fit_Inputs_original (SMDR_Q_in,
 		           SMDR_alphaS_MZ_EXPT,
 		           SMDR_alpha_EXPT,
 		           SMDR_GFermi_EXPT,
@@ -109,10 +107,6 @@ int main(){
 	}
 	
 	file->Close();
-	
-	ofstream lastSeed("lastSeed.txt");
-	lastSeed << 0 << endl;
-	lastSeed.close();
 	
 	return 0;
 

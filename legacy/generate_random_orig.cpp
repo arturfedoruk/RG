@@ -1,5 +1,6 @@
+// basically generate_net but with loop_Fit_Inputs_original()
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRnROOTgeneraterandomOrig.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` generate_random_orig.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
@@ -14,9 +15,9 @@
 #include "TTree.h"
 #include "TFile.h"
 using namespace std;
-#define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
 
-#include "my_Fit_Inputs_original.cpp"
+#include "../loop_Fit_Inputs_original.cpp"
+#include "../loop_configs.cpp"
 
 int main(){
 	
@@ -38,13 +39,6 @@ int main(){
 	
 	TFile *file = new TFile("random_data_orig.root", "UPDATE");
 	TTree *tree;
-	
-	float config_111111[9] = {0, 0, 0, 0, 0, 0, 1, 1} ; // for QCDQED_at_MZ & mbmb loop 0 doesn't exist
-	float config_222222[9] = {1, 1, 1, 1, 1, 1, 1, 1} ;
-	float config_333333[9] = {2, 2, 2, 2, 2, 2, 2, 2} ;
-	float config_333221[9] = {2, 2, 0, 2, 2, 0, 2, 1} ;
-	float config_444332[9] = {3, 2, 1, 2.5, 2.5, 1, 3, 2} ; 
-	float config_444333[9] = {3, 2, 2, 2.5, 2.5, 2, 3, 2} ; // for MZ & MW loop 3 doesn't exist
 	
 	int input_config, N;
 	
@@ -129,7 +123,7 @@ int main(){
 		mbmb = random_generator.Gaus(SMDR_mbmb_EXPT, SMDR_mbmb_EXPT_UNC_hi);
 		Delta_alpha = random_generator.Gaus(SMDR_Delta_alpha_had_5_MZ_EXPT, SMDR_Delta_alpha_had_5_MZ_EXPT_UNC);
 		
-		my_Fit_Inputs_original (SMDR_Q_in, 
+		loop_Fit_Inputs_original (SMDR_Q_in, 
 				alphaS_MZ, 
 				alpha, GFermi, 
 				MZ, Mh, Mt, 

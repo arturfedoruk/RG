@@ -1,5 +1,6 @@
+// old program that does not use Fit_Inputs(), but rather uses Minuit to fit. makes incorrect results and very slow, so the idea was abandoned
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRnMinuit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` direct_minimization.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"

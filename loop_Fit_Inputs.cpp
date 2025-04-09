@@ -1,5 +1,8 @@
-// version of SMDR_Fit_inputs with added loop customization and without particles lighter than b (all Qs are original)
-int  my_Fit_Inputs_original (SMDR_REAL Q_target,
+// version of SMDR_Fit_inputs with added loop customization, without particles lighter than b and with all Qs be pinned to be equal Q_target
+
+#define ZEROSAFE(a) (((a) > (SMDR_TOL)) ? (a) : (SMDR_TOL)) //idk wht's that
+
+int  loop_Fit_Inputs (SMDR_REAL Q_target,
                       SMDR_REAL alphaS_5_MZ_target,
                       SMDR_REAL alpha_target,
                       SMDR_REAL GFermi_target,
@@ -12,6 +15,12 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
                       SMDR_REAL error_target,
                       float* loop_config)
 {
+
+	// loop configurations for the functions below: 
+	// {Mt, Mt, Mh, MZ, MW, GFermi, QCDQED_at_MZ, mbmb} 
+	// {y, ?, z, x, x, z, x, y} -1 loop
+	// (Mt has two loop configurations)
+
   char funcname[] = "my_Fit_Inputs";
   int j;
   SMDR_REAL vratio, v2ratio;
@@ -28,6 +37,10 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
 	SMDR_REAL colambda_g3 = -0.0177478612;
 	SMDR_REAL coyt_g3     = -0.1604767897;
 	SMDR_REAL coyb_g3     = -1.4310376608;
+	SMDR_REAL coyc_g3     = -4.1701175462;
+	SMDR_REAL coys_g3     = -2.5730278584;
+	SMDR_REAL coyd_g3     = -2.5730391096;
+	SMDR_REAL coyu_g3     = -2.5738638240;
 	SMDR_REAL coyt_yt     = 1.0872686457;
 	SMDR_REAL coyt_yt2    = 0.0127850017;
 	SMDR_REAL colambda_yt = 0.1002393382;
@@ -37,8 +50,7 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
 	SMDR_REAL coyb_yb2    = 0.0744955866;
 
   if (mbmb_target < 3.0) {
-    SMDR_Warn (funcname, "Target mb(mb) is too small.");
-    SMDR_Warn (funcname, "Setting it and all lighter fermion masses to 0.\n");
+    std::cout << "warning: mbmb is too smol, setting it zero" << std::endl;
     mbmb_target = 0;
   } 
 
@@ -58,9 +70,10 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
   /* SMDR_Read_MSbar_Inputs ("ReferenceModel.dat"); */
   /* SMDR_Read_Value ("ReferenceModel.dat", "SMDR_v_in"); */
   /* SMDR_Read_OS_Inputs ("ReferenceModel.dat"); */
-  
-	// AUTOrefmodel.h literally	
-	SMDR_Q_in  = 172.5;  
+  	 
+	SMDR_Q  = Q_target;
+	SMDR_Q_in  = Q_target;
+  // AUTOrefmodel.h literally
 	SMDR_g3_in = 1.1630062487549031;
 	SMDR_g_in  = 0.6476067573057625;
 	SMDR_gp_in = 0.3585502116947177;
@@ -82,10 +95,15 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
 	SMDR_alphaS_5_MZ = 0.1179;
 	SMDR_mbmb = 4.18;
 
-  SMDR_RGeval_SM (Mt_target, loop_config[6]);
+  SMDR_RGeval_SM (Q_target, loop_config[6]); 
+  SMDR_Q  = Q_target;
+  SMDR_Q_in  = Q_target;
 
   SMDR_Save_Inputs ();
   SMDR_Delta_alpha_had_5_MZ_in = Delta_alpha_had_target;
+  
+  SMDR_Q  = Q_target;
+  SMDR_Q_in  = Q_target;
 
   for (j=0; j<18; j++) {
 
@@ -165,18 +183,21 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
       printf("Total fractional error = %.15Lf\n", err_total); */
       if (err_total < error_target) break;
     }
-  
+     
+    SMDR_Q  = Q_target;
+    SMDR_Q_in = Q_target;
+    
     /* Now evaluate all of the on-shell observables. */
-    SMDR_Eval_Mt_pole (SMDR_Mt_EXPT, 1, loop_config[0], loop_config[1], &SMDR_Mt_pole, &SMDR_Gammat_pole);
-    SMDR_Eval_Mh_pole (160., loop_config[2], &SMDR_Mh_pole, &SMDR_Gammah_pole);
-    SMDR_Eval_MZ_pole (160., loop_config[3], &SMDR_MZ_pole, &SMDR_GammaZ_pole,
+    SMDR_Eval_Mt_pole (Q_target, 1, loop_config[0], loop_config[1], &SMDR_Mt_pole, &SMDR_Gammat_pole);
+    SMDR_Eval_Mh_pole (Q_target, loop_config[2], &SMDR_Mh_pole, &SMDR_Gammah_pole);
+    SMDR_Eval_MZ_pole (Q_target, loop_config[3], &SMDR_MZ_pole, &SMDR_GammaZ_pole,
                        &SMDR_MZ_PDG, &SMDR_GammaZ_PDG);
 
     /* This one is computed only because it is needed by SMDR_Eval_Gauge() */
-    SMDR_Eval_MW_pole (160., loop_config[4], &SMDR_MW_pole, &SMDR_GammaW_pole,
+    SMDR_Eval_MW_pole (Q_target, loop_config[4], &SMDR_MW_pole, &SMDR_GammaW_pole,
                        &SMDR_MW_PDG, &SMDR_GammaW_PDG);
 
-    SMDR_GFermi = SMDR_Eval_GFermi (SMDR_Mt_EXPT, loop_config[5]);
+    SMDR_GFermi = SMDR_Eval_GFermi (Q_target, loop_config[5]);
     SMDR_Eval_Gauge (SMDR_Mt_pole, SMDR_Mh_pole, SMDR_MW_PDG);
     SMDR_Eval_QCDQED_at_MZ (SMDR_MZ_EXPT, SMDR_MZ_EXPT, loop_config[6]);
 
@@ -187,7 +208,9 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
     result_niters = j;
   }
 
-  SMDR_Load_Inputs();
+  SMDR_Load_Inputs();  
+  SMDR_Q  = Q_target;
+  SMDR_Q_in  = Q_target;
 
   SMDR_Lambda = 0;
   SMDR_Lambda_in = SMDR_Lambda = -SMDR_Eval_Veffmin (-1, loop_config[2]);
@@ -195,6 +218,8 @@ int  my_Fit_Inputs_original (SMDR_REAL Q_target,
 
   SMDR_RGeval_SM (Q_target, loop_config[6]);
   SMDR_Save_Inputs();
+  SMDR_Q  = Q_target;
+  SMDR_Q_in  = Q_target;
 
   return(result_niters);
 };

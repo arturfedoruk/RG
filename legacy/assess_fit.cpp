@@ -1,5 +1,6 @@
+// old program for assessing fits, now incorporated in fit.cpp
 // to launch the program: 
-// g++ `root-config --cflags` withSMDRassessfit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
+// g++ `root-config --cflags` assessfit.cpp `root-config --libs` -lm -lsmdr -ltsil -l3vil
 
 #include "smdr.h"
 #include "iostream"
