@@ -8,7 +8,7 @@ Notebook with picture of different phase spaces
 Notebook where contributions of loops in different variables are compared
 
 # ``fit_tables.nb``
-Notebook for effortless (almost) transforming fit results ``../fit_outputs/``, obtained by ``fit.cpp``, into TeX for for the paper
+Notebook for effortless (almost) transforming fit results ``../fit_outputs/``, obtained by ``../fit.cpp``, into TeX for for the paper
 
 # ``parametric_N_theoretical.nb``
 Notebook, where parametric and theoretical uncertainties of parameters of lambda running (interception with lambda=0, scale mu:beta=0 and value lambda(mu:beta=0))
