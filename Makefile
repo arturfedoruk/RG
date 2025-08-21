@@ -22,5 +22,8 @@ fit: fit.cpp smdr_pdg_2025.h
 theor_err: theor_err.cpp loop_Fit_Inputs.cpp loop_configs.cpp smdr_pdg_2025.h
 	$(CC) theor_err.cpp $(SMDR_LIBS) -o theor_err
 	
+tree_to_list: tree_to_list.cpp
+	$(CC) $(ROOT_FLAGS) tree_to_list.cpp $(ROOT_LIBS) -o tree_to_list
+	
 clean: 
 	rm -rf init_random generate_random generate_net fit theor_err
