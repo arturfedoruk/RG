@@ -1,3 +1,16 @@
+# Notation
+Throughout the programs theese notations can be found: 
+
+- x1 := g'^2/16pi = a1,
+- x2 := g^2/16pi = a2,
+- x3 := gs^2/16pi = a3,
+- y1 := yt^2/16pi = at,
+- y2 := yb^2/16pi = ab,
+- z := lambda/16pi = alambda,
+- |l1, l2, l3|ly1, ly2|lz| or l1l2l3ly1ly2lz := loop orders for quantities above
+- t := ln(mu^2/mu0^2), mu0 := 173.22 GeV
+- dot := d/dt
+
 # Running the programs
 To run program ``X.cpp``, simply do
 
