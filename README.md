@@ -1,15 +1,15 @@
 # Notation
 Throughout the programs theese notations can be found: 
 
-- x1 := 5g'^2/48pi^2 = a1,
-- x2 := g^2/16pi^2 = a2,
-- x3 := gs^2/16pi^2 = a3,
-- y1 := yt^2/16pi^2 = at,
-- y2 := yb^2/16pi^2 = ab,
-- z := lambda/16pi^2 = alambda,
+- $x_1 := 5g^{\prime2}/48\pi^2 = a_1$,
+- $x_2 := g^2/16\pi^2 = a_2$,
+- $x_3 := g_s^2/16\pi^2 = a_3$,
+- $y_1 := y_t^2/16\pi^2 = a_t$,
+- $y_2 := y_b^2/16\pi^2 = a_b$,
+- $z := \lambda/16pi^2 = a_\lambda$,
 - |L1,L2,L3|Ly1,Ly2|Lz| or L1L2L3Ly1Ly2Lz := loop orders for quantities above
-- t := ln(mu^2/mu0^2), mu0 := 173.22 GeV
-- dot := d/dt
+- $t := \ln(\mu^2/\mu_0^2), \mu_0 := 173.22 GeV$
+- dot $:= d/dt$
 
 # Running the programs
 To run program ``X.cpp``, simply do
