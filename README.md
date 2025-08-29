@@ -1,12 +1,12 @@
 # Notation
 Throughout the programs theese notations can be found: 
 
-- x1 := g'^2/16pi = a1,
-- x2 := g^2/16pi = a2,
-- x3 := gs^2/16pi = a3,
-- y1 := yt^2/16pi = at,
-- y2 := yb^2/16pi = ab,
-- z := lambda/16pi = alambda,
+- x1 := 5g'^2/48pi^2 = a1,
+- x2 := g^2/16pi^2 = a2,
+- x3 := gs^2/16pi^2 = a3,
+- y1 := yt^2/16pi^2 = at,
+- y2 := yb^2/16pi^2 = ab,
+- z := lambda/16pi^2 = alambda,
 - |L1,L2,L3|Ly1,Ly2|Lz| or L1L2L3Ly1Ly2Lz := loop orders for quantities above
 - t := ln(mu^2/mu0^2), mu0 := 173.22 GeV
 - dot := d/dt
