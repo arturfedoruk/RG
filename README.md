@@ -6,7 +6,7 @@ Throughout the programs theese notations can be found:
 - $x_3 := g_s^2/16\pi^2 = a_3$,
 - $y_1 := y_t^2/16\pi^2 = a_t$,
 - $y_2 := y_b^2/16\pi^2 = a_b$,
-- $z := \lambda/16pi^2 = a_\lambda$,
+- $z := \lambda/16\pi^2 = a_\lambda$,
 - |L1,L2,L3|Ly1,Ly2|Lz| or L1L2L3Ly1Ly2Lz := loop orders for quantities above
 - $t := \ln(\mu^2/\mu_0^2), \mu_0 := 173.22 GeV$
 - dot $:= d/dt$
